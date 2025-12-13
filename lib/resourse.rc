@@ -1,0 +1,3 @@
+#include "../include/resourse.hpp"
+
+IDI_APPLICATION ICON DISCARDABLE "..\\icons\\application.ico"
