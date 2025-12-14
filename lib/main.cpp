@@ -129,7 +129,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         stop_time=time(NULL)+300;
         break;
       case ID_10M:
-        stop_time=time(NULL)+360;
+        stop_time=time(NULL)+600;
         break;  
       // case ID_INPUT:
       //   int tmp;
@@ -155,7 +155,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 { 
   time_t tmp=time(NULL);
-  if(stop_time-tmp>=0||stop_time==-1)
+  if(tmp-(unsigned long long)stop_time<=0)
   {
     if (nCode >= 0 && wParam == WM_KEYDOWN)
     {
