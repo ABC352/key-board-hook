@@ -8,10 +8,10 @@
 #define taskbar_name "Window System"
 
 #define outfile_path "..\\log.txt"
-#define TaskbarIco_Path "..\\icons\\taskbar.ico"
+#define TaskbarIco_Path ".\\icons\\taskbar.ico"
 
 std::ofstream outfile;
-time_t stop_time=-1;
+time_t stop_time = LONG_LONG_MAX;
 HWND hwnd_handle;
 HMENU popupMenu_handle;
 UINT_PTR timer_handle;
@@ -123,18 +123,18 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
       switch (TrackPopupMenu(popupMenu_handle, TPM_RETURNCMD | TPM_BOTTOMALIGN | TPM_RETURNCMD, pt.x, pt.y, 0, hwnd, NULL))
       {
       case ID_ALLWAYS:
-        stop_time=-1;
+        stop_time = LONG_LONG_MAX;
         break;
       case ID_5M:
-        stop_time=time(NULL)+300;
+        stop_time = time(NULL) + 300;
         break;
       case ID_10M:
-        stop_time=time(NULL)+360;
-        break;  
+        stop_time = time(NULL) + 360;
+        break;
       // case ID_INPUT:
       //   int tmp;
       //   stop_time=time(NULL)+60*tmp;
-      //   break;   
+      //   break;
       case ID_EXIT:
         PostQuitMessage(0);
         break;
@@ -153,9 +153,9 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
-{ 
-  time_t tmp=time(NULL);
-  if(stop_time-tmp>=0||stop_time==-1)
+{
+  time_t tmp = time(NULL);
+  if (stop_time - tmp >= 0)
   {
     if (nCode >= 0 && wParam == WM_KEYDOWN)
     {
@@ -283,8 +283,8 @@ void Create_Wind(HINSTANCE hInstance)
   taskbar.uID = 1;
   taskbar.uFlags = NIF_MESSAGE | NIF_ICON | NIF_TIP;
   taskbar.uCallbackMessage = ID_CLICK;
-  taskbar.hIcon = (HICON)LoadImageA(NULL, TaskbarIco_Path, IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
-  //taskbar.hIcon = (HICON)LoadImage(NULL,MAKEINTRESOURCEA(IDI_TASKBAR), IMAGE_ICON, 0, 0, 0);
+  taskbar.hIcon = (HICON)LoadImageA(hInstance, TaskbarIco_Path, IMAGE_ICON, NULL, NULL, LR_LOADFROMFILE);
+  // taskbar.hIcon = (HICON)LoadImage(NULL,MAKEINTRESOURCEA(IDI_TASKBAR), IMAGE_ICON, 0, 0, 0);
   strcpy_s(taskbar.szTip, sizeof(taskbar_name), taskbar_name);
   taskbar.dwState = NIS_SHAREDICON;
   Shell_NotifyIconA(NIM_ADD, &taskbar);
