@@ -11,7 +11,7 @@
 #define TaskbarIco_Path "..\\icons\\taskbar.ico"
 
 std::ofstream outfile;
-time_t stop_time=-1;
+time_t stop_time=LONG_LONG_MAX;
 HWND hwnd_handle;
 HMENU popupMenu_handle;
 UINT_PTR timer_handle;
@@ -48,7 +48,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     MessageBoxExA(NULL, msg, "Error", MB_OK | MB_ICONERROR, 0);
     PostQuitMessage(0);
   }
-  ShowWindow(hwnd, SW_HIDE);
+  //ShowWindow(hwnd, SW_HIDE);
 
   hook_handle = SetWindowsHookExA(WH_KEYBOARD_LL, (HOOKPROC)&LowLevelKeyboardProc, NULL, 0);
   try
@@ -123,7 +123,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
       switch (TrackPopupMenu(popupMenu_handle, TPM_RETURNCMD | TPM_BOTTOMALIGN | TPM_RETURNCMD, pt.x, pt.y, 0, hwnd, NULL))
       {
       case ID_ALLWAYS:
-        stop_time=-1;
+        stop_time=LONG_LONG_MAX;
         break;
       case ID_5M:
         stop_time=time(NULL)+300;
@@ -155,7 +155,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 { 
   time_t tmp=time(NULL);
-  if(tmp-(unsigned long long)stop_time<=0)
+  if(tmp-stop_time<=0)
   {
     if (nCode >= 0 && wParam == WM_KEYDOWN)
     {
